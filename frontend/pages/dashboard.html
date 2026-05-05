@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGII - Panel de Control</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <!-- Barra de Navegación Superior -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">SGII - El Sol</a>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3" id="nombreUsuario">Operador</span>
+                <button class="btn btn-sm btn-danger fw-bold" id="btnCerrarSesion">Cerrar Sesión</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenedor Principal de Módulos -->
+    <div class="container mt-5">
+        <h2 class="mb-4">Panel de Control</h2>
+        <div class="row">
+            <!-- Módulo Inventario -->
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-primary fw-bold">Gestión de Inventario</h5>
+                        <p class="card-text text-muted">Consultar catálogo, agregar o editar productos.</p>
+                        <button class="btn btn-outline-primary w-100 disabled">Módulo en construcción</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Módulo Movimientos -->
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-success fw-bold">Entradas y Salidas</h5>
+                        <p class="card-text text-muted">Registrar flujo de mercancía en el almacén.</p>
+                        <button class="btn btn-outline-success w-100 disabled">Módulo en construcción</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Módulo Alertas -->
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-warning fw-bold">Alertas de Stock</h5>
+                        <p class="card-text text-muted">Revisar productos con inventario crítico.</p>
+                        <button class="btn btn-outline-warning w-100 disabled">Módulo en construcción</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de Lógica del Dashboard -->
+    <script src="../js/dashboard.js"></script>
+</body>
+</html>
