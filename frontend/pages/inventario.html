@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGII - Gestión de Inventario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-dark bg-primary shadow">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">SGII - Módulo de Inventario</span>
+            <a href="dashboard.html" class="btn btn-sm btn-light">Volver al Panel</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Panel de Registro de Producto (Create) -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white fw-bold">Registrar Nuevo Producto</div>
+                    <div class="card-body">
+                        <form id="formProducto">
+                            <div class="mb-2">
+                                <label class="form-label text-muted small fw-bold">Nombre del Producto</label>
+                                <input type="text" id="nombre" class="form-control form-control-sm" required>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label text-muted small fw-bold">Categoría</label>
+                                <select id="categoria_id" class="form-select form-select-sm" required>
+                                    <option value="1">Lácteos</option>
+                                    <option value="2">Abarrotes</option>
+                                    <option value="3">Limpieza</option>
+                                    <option value="4">Bebidas</option>
+                                </select>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label text-muted small fw-bold">Precio Unitario ($)</label>
+                                <input type="number" id="precio" class="form-control form-control-sm" step="0.01" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label text-muted small fw-bold">Stock Inicial</label>
+                                    <input type="number" id="stock" class="form-control form-control-sm" value="0" required>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label class="form-label text-muted small fw-bold">Stock Mínimo</label>
+                                    <input type="number" id="stock_minimo" class="form-control form-control-sm" value="5" required>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-sm w-100 fw-bold">Acoplar al Inventario</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel de Catálogo (Read) -->
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-dark text-white fw-bold">Catálogo Actual</div>
+                    <div class="card-body p-0 table-responsive">
+                        <table class="table table-hover table-striped mb-0 text-center align-middle">
+                            <thead class="table-dark small">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Producto</th>
+                                    <th>Categoría</th>
+                                    <th>Precio</th>
+                                    <th>Stock</th>
+                                    <th>Mínimo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpoTabla" class="small">
+                                <!-- Los datos se inyectarán aquí dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/inventario.js"></script>
+</body>
+</html>
