@@ -55,6 +55,33 @@ app.post('/api/productos', (req, res) => {
 });
 
 // ==========================================
+// MÓDULO 3: MOVIMIENTOS DE INVENTARIO
+// ==========================================
+
+// Endpoint para Registrar Entradas y Salidas
+app.post('/api/movimientos', (req, res) => {
+    const { producto_id, usuario_id, tipo_movimiento, cantidad } = req.body;
+
+    // 1. Inserción en la bitácora de movimientos
+    const sqlMovimiento = 'INSERT INTO movimientos (producto_id, usuario_id, tipo_movimiento, cantidad) VALUES (?, ?, ?, ?)';
+
+    db.query(sqlMovimiento, [producto_id, usuario_id, tipo_movimiento, cantidad], (err, result) => {
+        if (err) return res.status(500).json({ error: 'Fallo al registrar la auditoría del movimiento' });
+
+        // 2. Cálculo de la operación (+ para Entrada, - para Salida)
+        let operador = tipo_movimiento === 'Entrada' ? '+' : '-';
+        
+        // 3. Actualización dinámica del stock en el catálogo principal
+        const sqlUpdateStock = `UPDATE productos SET stock = stock ${operador} ? WHERE id = ?`;
+
+        db.query(sqlUpdateStock, [cantidad, producto_id], (err2, result2) => {
+            if (err2) return res.status(500).json({ error: 'Fallo de integridad: Movimiento registrado pero stock no actualizado' });
+            
+            res.json({ success: true, mensaje: `Operación de ${tipo_movimiento} ejecutada y stock calibrado exitosamente` });
+        });
+    });
+});
+// ==========================================
 // ARRANQUE DEL MOTOR DEL SERVIDOR
 // ==========================================
 const PUERTO = 3000;
