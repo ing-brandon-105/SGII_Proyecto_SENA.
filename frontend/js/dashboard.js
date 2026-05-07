@@ -20,3 +20,20 @@ document.getElementById('btnCerrarSesion').addEventListener('click', () => {
     // Redireccionar a la pantalla de inicio
     window.location.href = '../index.html';
 });
+
+// Función para cargar indicadores de alto nivel
+async function cargarTelemetria() {
+    try {
+        const respuesta = await fetch('http://localhost:3000/api/reportes/resumen');
+        const data = await respuesta.json();
+        
+        document.getElementById('indicadorProductos').textContent = data.total_productos || 0;
+        document.getElementById('indicadorEntradas').textContent = data.total_entradas || 0;
+        document.getElementById('indicadorSalidas').textContent = data.total_salidas || 0;
+    } catch (error) {
+        console.error('Fallo en la recepción de indicadores:', error);
+    }
+}
+
+// Ejecutar telemetría al cargar el dashboard
+cargarTelemetria();

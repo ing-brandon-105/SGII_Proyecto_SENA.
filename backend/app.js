@@ -81,6 +81,33 @@ app.post('/api/movimientos', (req, res) => {
         });
     });
 });
+
+// ==========================================
+// MÓDULO 4: REPORTES Y TELEMETRÍA
+// ==========================================
+
+// Reporte de Stock Crítico (Alertas de reabastecimiento)
+app.get('/api/reportes/stock-critico', (req, res) => {
+    const sql = 'SELECT nombre, stock, stock_minimo FROM productos WHERE stock <= stock_minimo';
+    db.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: 'Fallo en la extracción de alertas' });
+        res.json(results);
+    });
+});
+
+// Resumen General de Operaciones (Totales)
+app.get('/api/reportes/resumen', (req, res) => {
+    const sql = `
+        SELECT 
+            (SELECT COUNT(*) FROM productos) as total_productos,
+            (SELECT SUM(cantidad) FROM movimientos WHERE tipo_movimiento = 'Entrada') as total_entradas,
+            (SELECT SUM(cantidad) FROM movimientos WHERE tipo_movimiento = 'Salida') as total_salidas
+    `;
+    db.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: 'Fallo en la consolidación de indicadores' });
+        res.json(results[0]);
+    });
+});
 // ==========================================
 // ARRANQUE DEL MOTOR DEL SERVIDOR
 // ==========================================
