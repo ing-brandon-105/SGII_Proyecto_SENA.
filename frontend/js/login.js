@@ -25,7 +25,7 @@ document.getElementById('formLogin').addEventListener('submit', async (e) => {
             mensajeError.textContent = 'Acceso concedido. Redirigiendo...';
             mensajeError.classList.remove('d-none');
             
-             window.location.href = 'pages/dashboard.html'; // salto automatizado al dashboard (descomentar cuando esté listo)
+             window.location.href = 'pages/admin-dashboard.html'; // salto automatizado al dashboard (descomentar cuando esté listo)
         } else {
             mensajeError.classList.remove('alert-success');
             mensajeError.classList.add('alert-danger');
