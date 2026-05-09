@@ -108,6 +108,39 @@ app.get('/api/reportes/resumen', (req, res) => {
         res.json(results[0]);
     });
 });
+
+// ==========================================
+// MÓDULO 5: GESTIÓN DE OPERARIOS Y ROLES
+// ==========================================
+
+// Endpoint para auditar el directorio de usuarios (READ)
+app.get('/api/usuarios', (req, res) => {
+    // Excluimos la contraseña por protocolos de seguridad
+    const sql = 'SELECT id, nombre, correo, rol_id FROM usuarios';
+    db.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: 'Fallo al consultar el directorio de operarios' });
+        res.json(results);
+    });
+});
+
+// Endpoint para dar de alta a un nuevo operario (CREATE)
+app.post('/api/usuarios', (req, res) => {
+    const { nombre, correo, password, rol_id } = req.body;
+    
+    // Inyección de credenciales en la base de datos
+    const sql = 'INSERT INTO usuarios (nombre, correo, password, rol_id) VALUES (?, ?, ?, ?)';
+    db.query(sql, [nombre, correo, password, rol_id], (err, result) => {
+        if (err) {
+            // Manejo del error si el correo ya existe (Clave Única)
+            if (err.code === 'ER_DUP_ENTRY') {
+                return res.status(400).json({ error: 'El correo suministrado ya pertenece a un operador activo' });
+            }
+            return res.status(500).json({ error: 'Fallo al ensamblar el nuevo perfil' });
+        }
+        res.json({ success: true, mensaje: 'Operario acoplado al sistema exitosamente' });
+    });
+});
+
 // ==========================================
 // ARRANQUE DEL MOTOR DEL SERVIDOR
 // ==========================================

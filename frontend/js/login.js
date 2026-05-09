@@ -1,12 +1,11 @@
 document.getElementById('formLogin').addEventListener('submit', async (e) => {
-    e.preventDefault(); // Bloquea la recarga de la página
+    e.preventDefault();
 
     const correo = document.getElementById('correo').value;
     const password = document.getElementById('password').value;
     const mensajeError = document.getElementById('mensajeError');
 
     try {
-        // Transmisión de carga útil (payload) hacia el servidor
         const response = await fetch('http://localhost:3000/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -16,27 +15,27 @@ document.getElementById('formLogin').addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (data.success) {
-            // Guardamos el token de sesión en el almacenamiento local
+            // Guardar la credencial en la guantera del navegador
             localStorage.setItem('usuarioLogueado', JSON.stringify(data.usuario));
             
-            // Simulación de redirección temporal hasta tener el dashboard
-            mensajeError.classList.remove('alert-danger');
-            mensajeError.classList.add('alert-success');
-            mensajeError.textContent = 'Acceso concedido. Redirigiendo...';
-            mensajeError.classList.remove('d-none');
-            
-             window.location.href = 'pages/admin-dashboard.html'; // salto automatizado al dashboard (descomentar cuando esté listo)
+            // LÓGICA DE DESPACHO (SWITCH DE RUTAS)
+            if (data.usuario.rol_id === 1) {
+                // Si es Administrador
+                window.location.href = 'pages/admin-dashboard.html';
+            } else if (data.usuario.rol_id === 2) {
+                // Si es Operario de Planta
+                window.location.href = 'pages/operario-dashboard.html';
+            } else {
+                mensajeError.textContent = 'Error crítico: Rol no reconocido.';
+                mensajeError.classList.remove('d-none');
+            }
         } else {
-            mensajeError.classList.remove('alert-success');
-            mensajeError.classList.add('alert-danger');
             mensajeError.textContent = data.mensaje;
             mensajeError.classList.remove('d-none');
         }
     } catch (error) {
-        console.error('Fallo en la red de comunicaciones:', error);
-        mensajeError.classList.remove('alert-success');
-        mensajeError.classList.add('alert-danger');
-        mensajeError.textContent = 'Servidor fuera de línea.';
+        console.error('Falla en la transmisión:', error);
+        mensajeError.textContent = 'Servidor fuera de línea. Verifica la terminal Node.js.';
         mensajeError.classList.remove('d-none');
     }
 });
