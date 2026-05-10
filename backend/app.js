@@ -33,7 +33,7 @@ app.post('/api/login', (req, res) => {
 // Endpoint para Consultar el Catálogo (READ)
 app.get('/api/productos', (req, res) => {
     const sql = `
-        SELECT p.id, p.nombre, c.nombre AS categoria, p.precio, p.stock, p.stock_minimo 
+        SELECT p.id, p.nombre, p.categoria_id, c.nombre AS categoria, p.precio, p.stock, p.stock_minimo 
         FROM productos p 
         JOIN categorias c ON p.categoria_id = c.id
     `;
@@ -54,9 +54,54 @@ app.post('/api/productos', (req, res) => {
     });
 });
 
+// Endpoint para Actualizar un Producto (UPDATE)
+app.put('/api/productos/:id', (req, res) => {
+    const { id } = req.params;
+    const { nombre, categoria_id, precio, stock, stock_minimo } = req.body;
+    
+    const sql = 'UPDATE productos SET nombre=?, categoria_id=?, precio=?, stock=?, stock_minimo=? WHERE id=?';
+    db.query(sql, [nombre, categoria_id, precio, stock, stock_minimo, id], (err, result) => {
+        if (err) return res.status(500).json({ error: 'Fallo al recalibrar el producto' });
+        res.json({ success: true, mensaje: 'Parámetros del producto actualizados con éxito' });
+    });
+});
+
+// Endpoint para Eliminar un Producto (DELETE)
+app.delete('/api/productos/:id', (req, res) => {
+    const { id } = req.params;
+    const sql = 'DELETE FROM productos WHERE id=?';
+    
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            // Protección de Integridad: No podemos borrar un producto si tiene movimientos registrados
+            if (err.code === 'ER_ROW_IS_REFERENCED_2') {
+                return res.status(400).json({ error: 'Operación denegada: Este material tiene historial de Entradas/Salidas.' });
+            }
+            return res.status(500).json({ error: 'Fallo al dar de baja el material' });
+        }
+        res.json({ success: true, mensaje: 'Material dado de baja del catálogo' });
+    });
+});
+
 // ==========================================
 // MÓDULO 3: MOVIMIENTOS DE INVENTARIO
 // ==========================================
+
+// Endpoint para Consultar el Historial de Movimientos (READ)
+app.get('/api/movimientos', (req, res) => {
+    // Usamos JOIN para traer el nombre del producto y el nombre del operador que hizo el movimiento
+    const sql = `
+        SELECT m.id, p.nombre AS producto, u.nombre AS operador, m.tipo_movimiento, m.cantidad, m.fecha
+        FROM movimientos m
+        JOIN productos p ON m.producto_id = p.id
+        JOIN usuarios u ON m.usuario_id = u.id
+        ORDER BY m.fecha DESC
+    `;
+    db.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: 'Fallo al extraer el registro de auditoría' });
+        res.json(results);
+    });
+});
 
 // Endpoint para Registrar Entradas y Salidas
 app.post('/api/movimientos', (req, res) => {

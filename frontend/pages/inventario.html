@@ -1,87 +1,129 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGII - Gestión de Inventario</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>SGII | Gestión de Inventario</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.3.0/styles/overlayscrollbars.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta2/dist/css/adminlte.min.css" />
 </head>
-<body class="bg-light">
 
-    <nav class="navbar navbar-dark bg-primary shadow">
-        <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">SGII - Módulo de Inventario</span>
-            <a href="dashboard.html" class="btn btn-sm btn-light">Volver al Panel</a>
-        </div>
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+  <div class="app-wrapper">
+    
+    <nav class="app-header navbar navbar-expand bg-body shadow-sm">
+      <div class="container-fluid">
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" data-lte-toggle="sidebar" href="#"><i class="bi bi-list fs-3"></i></a></li>
+          <li class="nav-item d-none d-md-block"><span class="nav-link fw-bold">Administración de Catálogo</span></li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><span id="labelUsuario" class="nav-link fw-bold text-primary">Operador...</span></li>
+        </ul>
+      </div>
     </nav>
 
-    <div class="container mt-4">
-        <div class="row">
-            <!-- Panel de Registro de Producto (Create) -->
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-success text-white fw-bold">Registrar Nuevo Producto</div>
-                    <div class="card-body">
-                        <form id="formProducto">
-                            <div class="mb-2">
-                                <label class="form-label text-muted small fw-bold">Nombre del Producto</label>
-                                <input type="text" id="nombre" class="form-control form-control-sm" required>
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label text-muted small fw-bold">Categoría</label>
-                                <select id="categoria_id" class="form-select form-select-sm" required>
-                                    <option value="1">Lácteos</option>
-                                    <option value="2">Abarrotes</option>
-                                    <option value="3">Limpieza</option>
-                                    <option value="4">Bebidas</option>
-                                </select>
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label text-muted small fw-bold">Precio Unitario ($)</label>
-                                <input type="number" id="precio" class="form-control form-control-sm" step="0.01" required>
-                            </div>
-                            <div class="row">
-                                <div class="col-6 mb-3">
-                                    <label class="form-label text-muted small fw-bold">Stock Inicial</label>
-                                    <input type="number" id="stock" class="form-control form-control-sm" value="0" required>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <label class="form-label text-muted small fw-bold">Stock Mínimo</label>
-                                    <input type="number" id="stock_minimo" class="form-control form-control-sm" value="5" required>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-success btn-sm w-100 fw-bold">Acoplar al Inventario</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+    <aside class="app-sidebar bg-dark shadow" data-bs-theme="dark">
+      <div class="sidebar-brand p-3 text-center border-bottom border-secondary">
+        <span class="brand-text fw-bold fs-4 text-white">SGII - El Sol</span>
+      </div>
+      <div class="sidebar-wrapper">
+        <nav class="mt-3">
+          <ul class="nav sidebar-menu flex-column" role="menu">
+            <li class="nav-header text-uppercase text-secondary fw-bold small px-3">Navegación</li>
+            <li class="nav-item"><a href="admin-dashboard.html" class="nav-link m-2"><i class="nav-icon bi bi-speedometer2"></i><p>Dashboard</p></a></li>
+            <li class="nav-item"><a href="inventario.html" class="nav-link active bg-primary text-white rounded m-2"><i class="nav-icon bi bi-box-seam"></i><p>Inventario</p></a></li>
+            <li class="nav-item"><a href="movimientos.html" class="nav-link m-2"><i class="nav-icon bi bi-arrow-left-right text-success"></i><p>Movimientos</p></a></li>
+            <li class="nav-item"><a href="usuarios.html" class="nav-link m-2"><i class="nav-icon bi bi-people-fill text-warning"></i><p>Usuarios</p></a></li>
+            <li class="nav-item mt-4"><a href="#" id="btnCerrarSesion" class="nav-link m-2 text-danger border border-danger rounded"><i class="nav-icon bi bi-box-arrow-right"></i><p>Salir</p></a></li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
 
-            <!-- Panel de Catálogo (Read) -->
-            <div class="col-md-8">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-dark text-white fw-bold">Catálogo Actual</div>
-                    <div class="card-body p-0 table-responsive">
-                        <table class="table table-hover table-striped mb-0 text-center align-middle">
-                            <thead class="table-dark small">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Producto</th>
-                                    <th>Categoría</th>
-                                    <th>Precio</th>
-                                    <th>Stock</th>
-                                    <th>Mínimo</th>
-                                </tr>
-                            </thead>
-                            <tbody id="cuerpoTabla" class="small">
-                                <!-- Los datos se inyectarán aquí dinámicamente -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <main class="app-main p-4">
+      <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold text-dark">Maestro de Productos</h3>
+            <button class="btn btn-primary fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalProducto">
+                <i class="bi bi-plus-circle me-2"></i>Nuevo Producto
+            </button>
         </div>
-    </div>
 
-    <script src="../js/inventario.js"></script>
+        <div class="card shadow border-0 rounded-3">
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0 text-center">
+                <thead class="table-dark">
+                  <tr>
+                    <th>ID</th>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="cuerpoTabla">
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="modal fade" id="modalProducto" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title fw-bold">Gestión de Producto</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body bg-light">
+          <form id="formProducto">
+            <input type="hidden" id="idProducto"> <div class="mb-3">
+              <label class="form-label fw-bold small">Nombre del Producto</label>
+              <input type="text" id="nombre" class="form-control" required>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold small">Categoría</label>
+                <select id="categoria_id" class="form-select">
+                  <option value="1">Lácteos</option>
+                  <option value="2">Abarrotes</option>
+                  <option value="3">Limpieza</option>
+                  <option value="4">Bebidas</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold small">Precio ($)</label>
+                <input type="number" id="precio" class="form-control" step="0.01" required>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-6 mb-3">
+                  <label class="form-label fw-bold small">Stock Inicial</label>
+                  <input type="number" id="stock" class="form-control" value="0">
+                </div>
+                <div class="col-6 mb-3">
+                  <label class="form-label fw-bold small">Stock Mínimo</label>
+                  <input type="number" id="stock_minimo" class="form-control" value="5">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success w-100 fw-bold py-2">Sincronizar Producto</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta2/dist/js/adminlte.min.js"></script>
+  <script src="../js/inventario.js"></script>
 </body>
 </html>
