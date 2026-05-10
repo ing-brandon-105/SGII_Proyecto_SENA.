@@ -1,30 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGII - Acceso Corporativo</title>
-    <!-- Framework CSS Bootstrap para diseño estructurado -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>SGII | Portal de Acceso</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="BranSoft" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@4.0.0-beta2/dist/css/adminlte.min.css" />
 </head>
-<body class="bg-light d-flex justify-content-center align-items-center vh-100">
 
-    <div class="card shadow p-4" style="width: 25rem;">
-        <h4 class="text-center mb-4 text-primary">SGII - Abarrotes El Sol</h4>
-        <form id="formLogin">
-            <div class="mb-3">
-                <label class="form-label fw-bold">Correo Electrónico</label>
-                <input type="email" id="correo" class="form-control" placeholder="ejemplo@elsol.com" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label fw-bold">Contraseña</label>
-                <input type="password" id="password" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100 fw-bold">Autenticar Sesión</button>
-            <div id="mensajeError" class="alert alert-danger mt-3 text-center d-none"></div>
-        </form>
+<body class="login-page bg-body-secondary">
+  
+  <div class="login-box">
+    <div class="login-logo mb-4">
+      <a href="#" class="fw-bold text-dark display-6"><b>SGII</b> Corporativo</a>
     </div>
+    
+    <div class="card shadow-lg border-0 rounded-4">
+      <div class="card-body login-card-body p-4">
+        <p class="login-box-msg text-muted fw-bold mb-4 text-center">Autenticación de Operario</p>
+        
+        <form id="formLogin">
+          <div class="input-group mb-3 shadow-sm">
+            <input type="email" id="correo" class="form-control form-control-lg bg-light" placeholder="Correo electrónico" required>
+            <div class="input-group-text bg-white"><span class="bi bi-envelope text-secondary"></span></div>
+          </div>
+          
+          <div class="input-group mb-3 shadow-sm">
+            <input type="password" id="password" class="form-control form-control-lg bg-light" placeholder="Clave de seguridad" required>
+            <div class="input-group-text bg-white"><span class="bi bi-lock-fill text-secondary"></span></div>
+          </div>
+          
+          <div id="mensajeError" class="alert alert-danger d-none small py-2 text-center fw-bold mt-2"></div>
+          
+          <div class="row mt-4">
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow">Desbloquear Sistema</button>
+            </div>
+          </div>
+        </form>
+        
+        <div class="mt-4 text-center">
+            <p class="mb-0 text-secondary small"><i class="bi bi-shield-check text-success me-1"></i>Acceso restringido y monitoreado</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <script src="js/login.js"></script>
+  <script src="js/login.js"></script> 
 </body>
 </html>
